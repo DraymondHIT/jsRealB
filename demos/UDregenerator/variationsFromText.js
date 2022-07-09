@@ -160,7 +160,7 @@ function generateQuestions(jsr){
             if (pos=="post"){
                 if (dep.terminal.isA("P")) {
                     // it is a mod check for the form (mod (P(prep),comp))
-                    if (dep.dependents.length==1 && dep.dependents[0].isA("comp")){
+                    if (dep.dependents[0].isA("comp")){
                         const prep=dep.terminal.lemma;
                         // console.log("****prep:",prep)
                         const indirObj=dep.dependents[0]
