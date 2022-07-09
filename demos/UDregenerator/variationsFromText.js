@@ -145,7 +145,8 @@ function generateQuestions(jsr){
                 if (dep.isA("comp") && dep.terminal.isA("N")){
                     // a direct object
                     generateQuestion(jsr,dep,"wad");
-                } else if (dep.terminal.isA("P")) { 
+                }
+                if (dep.terminal.isA("P")) {
                     // it is a mod check for the form (mod (P(prep),comp))
                     if (dep.dependents.length==1 && dep.dependents[0].isA("comp")){
                         const prep=dep.terminal.lemma;
@@ -153,9 +154,9 @@ function generateQuestions(jsr){
                         const indirObj=dep.dependents[0]
                         if (preps["whe"].has(prep))
                             generateQuestion(jsr,indirObj,"whe");
-                        else if (preps["whn"].has(prep))
+                        if (preps["whn"].has(prep))
                             generateQuestion(jsr,indirObj,"whn");
-                        else
+                        if (preps["wai"].has(prep))
                             generateQuestion(jsr,indirObj,"wai");
                     }
                 }
