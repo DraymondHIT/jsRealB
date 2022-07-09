@@ -93,15 +93,9 @@ const preps=prepositionsList[language];
 const fmt="# %s = %s";
 let nbQuestions=0,nbNegations=0;
 
-function generateQuestion(jsr,ansJSR,typ){
-    if (ansJSR.terminal.isA("Pro")) return; // do not generate a question whose answer is a pronoun
+function generateQuestion(jsr, typ){
     const question=jsr.clone().typ({"int":typ});
-    if (showTrees){
-        console.log(jsr.toSource(0));
-        console.log(question.toSource(0));
-        console.log(ansJSR.toSource(0));
-    }
-    console.log(fmt,typ.toUpperCase()+" ",clean(question.toString())+" => "+clean(ansJSR.toString()));
+    console.log(fmt,typ.toUpperCase()+" ",clean(question.toString()));
     nbQuestions++;
 }
 
@@ -125,56 +119,19 @@ function generateNegation(jsr){
 // so that the removal of the answer is the same in both cases
 function generateQuestions(jsr){
     const subjIdx=jsr.findIndex(d=>d.isA("subj"));
-    if (subjIdx>=0){
-        // insure that the verb at the third person singular,
-        // because now the subject has been removed
-        let jsr1=jsr.clone();
-        jsr1.terminal.setProp("n","s");
-        jsr1.terminal.setProp("pe",3);
-        generateQuestion(jsr1,jsr1.dependents[subjIdx],"was")
-    }
-    // object complement 
-    let idx=-1;
-    do {
-        idx=jsr.findIndex(d=>d.isOneOf(["comp"]),idx+1);
-        if (idx>=0){
-            const dep=jsr.dependents[idx];
-            // ignore complements coming before the verb
-            const pos=dep.getProp("pos")||"post"
-            if (pos=="post"){
-                if (dep.isA("comp") && dep.terminal.isA("N")){
-                    // a direct object
-                    generateQuestion(jsr,dep,"wad");
-                }
-            }
-        }
-    } while (idx>=0);
 
-    let idx1=-1;
-    do {
-        idx1=jsr.findIndex(d=>d.isOneOf(["mod"]),idx1+1);
-        if (idx1>=0){
-            const dep=jsr.dependents[idx1];
-            // ignore complements coming before the verb
-            const pos=dep.getProp("pos")||"post"
-            if (pos=="post"){
-                if (dep.terminal.isA("P")) {
-                    // it is a mod check for the form (mod (P(prep),comp))
-                    if (dep.dependents[0].isA("comp")){
-                        const prep=dep.terminal.lemma;
-                        // console.log("****prep:",prep)
-                        const indirObj=dep.dependents[0]
-                        if (preps["whe"].has(prep))
-                            generateQuestion(jsr,indirObj,"whe");
-                        if (preps["whn"].has(prep))
-                            generateQuestion(jsr,indirObj,"whn");
-                        if (preps["wai"].has(prep))
-                            generateQuestion(jsr,indirObj,"wai");
-                    }
-                }
-            }
-        }
-    } while (idx1>=0);
+    let jsr1=jsr.clone();
+    jsr1.terminal.setProp("n","s");
+    jsr1.terminal.setProp("pe",3);
+
+    generateQuestion(jsr1, "was");
+    generateQuestion(jsr1, "wad");
+    generateQuestion(jsr1, "wod");
+    generateQuestion(jsr1, "whe");
+    generateQuestion(jsr1, "why");
+    generateQuestion(jsr1, "whn");
+    generateQuestion(jsr1, "how");
+
 }
 
 function clean(s){
