@@ -148,7 +148,7 @@ function generateQuestions(jsr){
                 }
                 if (dep.terminal.isA("P")) {
                     // it is a mod check for the form (mod (P(prep),comp))
-                    if (dep.dependents.length==1 && dep.dependents[0].isA("comp")){
+//                    if (dep.dependents.length==1 && dep.dependents[0].isA("comp")){
                         const prep=dep.terminal.lemma;
                         // console.log("****prep:",prep)
                         const indirObj=dep.dependents[0]
@@ -158,7 +158,7 @@ function generateQuestions(jsr){
                             generateQuestion(jsr,indirObj,"whn");
                         if (preps["wai"].has(prep))
                             generateQuestion(jsr,indirObj,"wai");
-                    }
+//                    }
                 }
             }
         }
