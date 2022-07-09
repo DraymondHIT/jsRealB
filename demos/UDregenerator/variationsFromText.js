@@ -136,7 +136,7 @@ function generateQuestions(jsr){
     // object complement 
     let idx=-1;
     do {
-        idx=jsr.findIndex(d=>d.isOneOf(["comp","mod"]),idx+1);
+        idx=jsr.findIndex(d=>d.isOneOf(["comp"]),idx+1);
         if (idx>=0){
             const dep=jsr.dependents[idx];
             // ignore complements coming before the verb
@@ -146,6 +146,18 @@ function generateQuestions(jsr){
                     // a direct object
                     generateQuestion(jsr,dep,"wad");
                 }
+            }
+        }
+    } while (idx>=0);
+
+    let idx=-1;
+    do {
+        idx=jsr.findIndex(d=>d.isOneOf(["mod"]),idx+1);
+        if (idx>=0){
+            const dep=jsr.dependents[idx];
+            // ignore complements coming before the verb
+            const pos=dep.getProp("pos")||"post"
+            if (pos=="post"){
                 if (dep.terminal.isA("P")) {
                     // it is a mod check for the form (mod (P(prep),comp))
                     if (dep.dependents.length==1 && dep.dependents[0].isA("comp")){
