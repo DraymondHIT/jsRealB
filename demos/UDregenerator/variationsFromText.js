@@ -150,11 +150,11 @@ function generateQuestions(jsr){
         }
     } while (idx>=0);
 
-    let idx=-1;
+    let idx1=-1;
     do {
-        idx=jsr.findIndex(d=>d.isOneOf(["mod"]),idx+1);
-        if (idx>=0){
-            const dep=jsr.dependents[idx];
+        idx1=jsr.findIndex(d=>d.isOneOf(["mod"]),idx1+1);
+        if (idx1>=0){
+            const dep=jsr.dependents[idx1];
             // ignore complements coming before the verb
             const pos=dep.getProp("pos")||"post"
             if (pos=="post"){
@@ -174,7 +174,7 @@ function generateQuestions(jsr){
                 }
             }
         }
-    } while (idx>=0);
+    } while (idx1>=0);
 }
 
 function clean(s){
